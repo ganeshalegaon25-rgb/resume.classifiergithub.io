@@ -1,30 +1,42 @@
 async function analyzePDF() {
-    const file = document.getElementById("pdfFile").files[0];
+    const fileInput = document.getElementById("pdfFile");
 
-    if (!file) {
-        alert("Please upload a PDF");
+    if (!fileInput.files.length) {
+        alert("Please upload a PDF first");
         return;
     }
 
+    const file = fileInput.files[0];
     const reader = new FileReader();
 
-    reader.onload = async function () {
+    reader.onload = function () {
         const typedarray = new Uint8Array(this.result);
 
-        const pdf = await pdfjsLib.getDocument(typedarray).promise;
+        pdfjsLib.getDocument(typedarray).promise.then(function (pdf) {
 
-        let text = "";
+            let text = "";
+            let promises = [];
 
-        for (let i = 1; i <= pdf.numPages; i++) {
-            const page = await pdf.getPage(i);
-            const content = await page.getTextContent();
+            for (let i = 1; i <= pdf.numPages; i++) {
+                promises.push(
+                    pdf.getPage(i).then(function (page) {
+                        return page.getTextContent().then(function (content) {
+                            content.items.forEach(item => {
+                                text += item.str + " ";
+                            });
+                        });
+                    })
+                );
+            }
 
-            content.items.forEach(item => {
-                text += item.str + " ";
+            Promise.all(promises).then(function () {
+                classifyResume(text.toLowerCase());
             });
-        }
 
-        classifyResume(text.toLowerCase());
+        }).catch(function(error){
+            document.getElementById("result").innerHTML = "Error reading PDF";
+            console.error(error);
+        });
     };
 
     reader.readAsArrayBuffer(file);
