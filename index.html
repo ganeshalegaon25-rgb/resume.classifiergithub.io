@@ -1,39 +1,52 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 
 <head>
-    <title>AI Resume Classifier</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HireAI - Smart Resume Analyzer</title>
 
     <style>
         body {
+            margin: 0;
+            padding: 0;
             font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
+            background: linear-gradient(to right, #1e3c72, #2a5298);
+            color: white;
             text-align: center;
-            padding: 40px;
         }
 
         .container {
-            background: white;
-            padding: 30px;
-            border-radius: 10px;
             width: 60%;
-            margin: auto;
-            box-shadow: 0px 0px 10px gray;
+            margin: 50px auto;
+            background: white;
+            color: black;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0px 0px 20px rgba(0,0,0,0.3);
         }
 
         h1 {
-            color: #333;
+            color: #1e3c72;
         }
 
-        input {
+        .upload-box {
+            border: 2px dashed #1e3c72;
+            padding: 30px;
             margin-top: 20px;
+            border-radius: 10px;
+            background: #f4f4f4;
+        }
+
+        input[type="file"] {
+            margin-top: 15px;
         }
 
         button {
             margin-top: 20px;
             padding: 12px 25px;
             border: none;
-            background-color: #007bff;
+            background: #1e3c72;
             color: white;
             font-size: 16px;
             border-radius: 5px;
@@ -41,29 +54,53 @@
         }
 
         button:hover {
-            background-color: #0056b3;
+            background: #16325c;
+        }
+
+        #loading {
+            margin-top: 20px;
+            font-size: 18px;
+            color: #1e3c72;
+            display: none;
         }
 
         #result {
             margin-top: 30px;
-            font-size: 22px;
+            text-align: left;
+        }
+
+        .score-container {
+            width: 100%;
+            background: #ddd;
+            border-radius: 10px;
+            margin-top: 15px;
+        }
+
+        .score-bar {
+            height: 30px;
+            width: 0%;
+            background: green;
+            border-radius: 10px;
+            text-align: center;
+            line-height: 30px;
+            color: white;
+        }
+
+        ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        li {
+            padding: 5px;
+        }
+
+        .good {
             color: green;
         }
 
-        #scoreBarContainer {
-            width: 80%;
-            background-color: #ddd;
-            margin: 20px auto;
-            border-radius: 10px;
-        }
-
-        #scoreBar {
-            height: 30px;
-            width: 0%;
-            background-color: green;
-            border-radius: 10px;
-            line-height: 30px;
-            color: white;
+        .bad {
+            color: red;
         }
     </style>
 </head>
@@ -72,28 +109,26 @@
 
     <div class="container">
 
-        <h1>AI Resume Screening & Classification System</h1>
+        <h1>HireAI - Smart Resume Analyzer</h1>
 
-        <p>Upload Resume PDF</p>
+        <p>Upload your resume PDF for AI analysis</p>
 
-        <input type="file" id="pdfFile" accept=".pdf">
-
-        <br>
+        <div class="upload-box">
+            <input type="file" id="pdfFile" accept=".pdf">
+        </div>
 
         <button onclick="analyzePDF()">Analyze Resume</button>
 
-        <div id="result"></div>
+        <div id="loading">Analyzing Resume...</div>
 
-        <div id="scoreBarContainer">
-            <div id="scoreBar">0%</div>
-        </div>
+        <div id="result"></div>
 
     </div>
 
-    <!-- PDF.js Library -->
+    <!-- PDF.js -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.min.js"></script>
 
-    <!-- JS File -->
+    <!-- JS -->
     <script src="script.js"></script>
 
 </body>
