@@ -1,15 +1,18 @@
 async function analyzePDF() {
+
     const fileInput = document.getElementById("pdfFile");
 
     if (!fileInput.files.length) {
-        alert("Please upload a PDF first");
+        alert("Please upload a PDF resume");
         return;
     }
 
     const file = fileInput.files[0];
+
     const reader = new FileReader();
 
     reader.onload = function () {
+
         const typedarray = new Uint8Array(this.result);
 
         pdfjsLib.getDocument(typedarray).promise.then(function (pdf) {
@@ -18,68 +21,129 @@ async function analyzePDF() {
             let promises = [];
 
             for (let i = 1; i <= pdf.numPages; i++) {
+
                 promises.push(
+
                     pdf.getPage(i).then(function (page) {
+
                         return page.getTextContent().then(function (content) {
+
                             content.items.forEach(item => {
                                 text += item.str + " ";
                             });
+
                         });
+
                     })
+
                 );
+
             }
 
             Promise.all(promises).then(function () {
+
                 classifyResume(text.toLowerCase());
+
             });
 
-        }).catch(function (error) {
-            document.getElementById("result").innerHTML = "Error reading PDF";
-            console.error(error);
         });
+
     };
 
     reader.readAsArrayBuffer(file);
+
 }
 
 function classifyResume(text) {
+
     let role = "Unknown";
-    let score = 50; // base score
+    let score = 40;
 
-    // Role detection
-    if (text.includes("marketing") || text.includes("sales")) {
+    // Role Detection
+    if (
+        text.includes("marketing") ||
+        text.includes("sales") ||
+        text.includes("seo")
+    ) {
+
         role = "Marketing";
-        score += 20;
-    } else if (text.includes("finance") || text.includes("account")) {
+        score += 25;
+
+    }
+
+    else if (
+        text.includes("finance") ||
+        text.includes("account") ||
+        text.includes("banking")
+    ) {
+
         role = "Finance";
-        score += 20;
-    } else if (text.includes("hr") || text.includes("recruitment")) {
+        score += 25;
+
+    }
+
+    else if (
+        text.includes("hr") ||
+        text.includes("recruitment") ||
+        text.includes("hiring")
+    ) {
+
         role = "HR";
-        score += 20;
-    } else if (text.includes("python") || text.includes("java") || text.includes("coding")) {
+        score += 25;
+
+    }
+
+    else if (
+        text.includes("python") ||
+        text.includes("java") ||
+        text.includes("coding") ||
+        text.includes("developer")
+    ) {
+
         role = "IT";
-        score += 20;
+        score += 25;
+
     }
 
-    // Length scoring
-    if (text.length > 1500) {
-        score += 20;
-    } else if (text.length > 800) {
-        score += 10;
-    } else {
-        score -= 10;
+    // Resume Length Analysis
+    if (text.length > 2000) {
+
+        score += 25;
+
     }
 
-    // Bonus skills
+    else if (text.length > 1000) {
+
+        score += 15;
+
+    }
+
+    else {
+
+        score += 5;
+
+    }
+
+    // Skills Bonus
     if (text.includes("communication")) score += 5;
+    if (text.includes("leadership")) score += 5;
     if (text.includes("management")) score += 5;
     if (text.includes("analysis")) score += 5;
+    if (text.includes("excel")) score += 5;
 
-    // Limit score (1–100)
+    // Limit Score
     if (score > 100) score = 100;
-    if (score < 1) score = 1;
 
-    // Display result
+    // Result Display
     document.getElementById("result").innerHTML =
-        "Predicted Role: " + role + "<br>Resume Score: " + score + "/100";
+        "<h2>Predicted Role: " + role + "</h2>" +
+        "<h2>Resume Score: " + score + "/100</h2>";
+
+    // Progress Bar
+    let scoreBar = document.getElementById("scoreBar");
+
+    scoreBar.style.width = score + "%";
+
+    scoreBar.innerHTML = score + "%";
+
 }
