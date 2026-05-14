@@ -1,48 +1,101 @@
 <!DOCTYPE html>
 <html>
+
 <head>
-    <title>AI Resume Screener</title>
+    <title>AI Resume Classifier</title>
 
     <style>
         body {
-            font-family: Arial;
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
             text-align: center;
-            padding: 30px;
+            padding: 40px;
         }
 
-        input, button {
-            margin-top: 10px;
-            padding: 10px;
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            width: 60%;
+            margin: auto;
+            box-shadow: 0px 0px 10px gray;
+        }
+
+        h1 {
+            color: #333;
+        }
+
+        input {
+            margin-top: 20px;
+        }
+
+        button {
+            margin-top: 20px;
+            padding: 12px 25px;
+            border: none;
+            background-color: #007bff;
+            color: white;
+            font-size: 16px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #0056b3;
         }
 
         #result {
-            margin-top: 20px;
-            font-size: 20px;
+            margin-top: 30px;
+            font-size: 22px;
             color: green;
+        }
+
+        #scoreBarContainer {
+            width: 80%;
+            background-color: #ddd;
+            margin: 20px auto;
+            border-radius: 10px;
+        }
+
+        #scoreBar {
+            height: 30px;
+            width: 0%;
+            background-color: green;
+            border-radius: 10px;
+            line-height: 30px;
+            color: white;
         }
     </style>
 </head>
 
 <body>
 
-    <h1>AI Resume Screening System</h1>
+    <div class="container">
 
-    <p>Upload your resume (PDF):</p>
+        <h1>AI Resume Screening & Classification System</h1>
 
-    <!-- PDF Upload -->
-    <input type="file" id="pdfFile" accept=".pdf"><br><br>
+        <p>Upload Resume PDF</p>
 
-    <!-- Button -->
-    <button onclick="analyzePDF()">Analyze Resume</button>
+        <input type="file" id="pdfFile" accept=".pdf">
 
-    <!-- Result -->
-    <h2 id="result"></h2>
+        <br>
 
-    <!-- PDF.js (IMPORTANT - do not change) -->
+        <button onclick="analyzePDF()">Analyze Resume</button>
+
+        <div id="result"></div>
+
+        <div id="scoreBarContainer">
+            <div id="scoreBar">0%</div>
+        </div>
+
+    </div>
+
+    <!-- PDF.js Library -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.min.js"></script>
 
-    <!-- Your Script -->
+    <!-- JS File -->
     <script src="script.js"></script>
 
 </body>
+
 </html>
